@@ -29,6 +29,7 @@ export function ConversationsProvider({ id, children }) {
       const contact = contacts.find(contact => {
         return contact.id === recipient;
       });
+      // Return a new object with the details of our conversation
       const name = (contact && contact.name) || recipient;
       return { id: recipient, name };
     });
