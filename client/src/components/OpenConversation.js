@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Form, InputGroup, Button } from 'react-bootstrap';
 import { useConversations } from '../contexts/ConversationsProvider';
 
