@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import useLocalStorage from '../hooks/useLocalStorage';
 import { useContacts } from './ContactsProvider';
 
@@ -13,6 +13,7 @@ export function ConversationsProvider({ id, children }) {
     'conversations',
     []
   );
+  const [selectedConversationIndex, setSelectedConversationIndex] = useState(0);
   const { contacts } = useContacts();
 
   function createConversation(recipients) {
@@ -22,23 +23,23 @@ export function ConversationsProvider({ id, children }) {
   }
 
   //   Format the list of Conversations by mapping through each conversation,
-  const formattedConversations = conversations.map(conversation => {
-    //   followed by each recipient within a conversation, (recipient = an id)
+  const formattedConversations = conversations.map((conversation, index) => {
     const recipients = conversation.recipients.map(recipient => {
-      //   to find match recipients with contacts based on ID
       const contact = contacts.find(contact => {
-        return contact.id === recipient;
+        // followed by each recipient within a conversation, (recipient = an id)
+        return contact.id === recipient; //   to find match recipients with contacts based on ID
       });
-      // Return a new object with the details of our conversation
-      const name = (contact && contact.name) || recipient;
+      const name = (contact && contact.name) || recipient; // Return a new object with the details of our conversation
       return { id: recipient, name };
     });
-    return { ...conversation, recipients };
+    const selected = index === selectedConversationIndex; // Check if our current index is equal to the selectedConversationIndex and return a bool if this is selected
+    return { ...conversation, recipients, selected };
   });
 
   const value = {
     conversations: formattedConversations,
     createConversation,
+    selectConversationIndex: setSelectedConversationIndex,
   };
 
   return (
